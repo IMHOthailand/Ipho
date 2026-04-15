@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>IPhO Portal</title>
+
+<style>
+body {
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+    background:#0f172a;
+    color:white;
+}
+
+/* NAV */
+nav {
+    display:flex;
+    gap:20px;
+    padding:15px;
+    background:#1e293b;
+}
+nav button {
+    background:none;
+    border:none;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+
+/* SECTIONS */
+.section {
+    display:none;
+    padding:20px;
+}
+.active {
+    display:block;
+}
+
+/* TABLE */
+table {
+    width:100%;
+    border-collapse:collapse;
+}
+th,td {
+    padding:10px;
+    border-bottom:1px solid #334155;
+    text-align:center;
+}
+
+/* INPUTS */
+input,select {
+    padding:8px;
+    margin:5px;
+}
+
+/* CARD */
+.card {
+    background:#1e293b;
+    padding:15px;
+    margin:10px;
+    border-radius:10px;
+}
+
+/* GRID */
+.grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:15px;
+}
+</style>
+
+</head>
+<body>
+
+<nav>
+<button onclick="show('results')">Results 2024</button>
+<button onclick="show('students')">Students</button>
+<button onclick="show('faculty')">Faculty</button>
+<button onclick="show('countries')">Countries</button>
+<button onclick="show('years')">Other Years</button>
+</nav>
+
+<!-- RESULTS -->
+<div id="results" class="section active">
+
+<h2>IPhO 2024 Results</h2>
+
+<input id="search" placeholder="Search name..." onkeyup="render()">
+<select id="medal" onchange="render()">
+<option value="">All</option>
+<option>Gold</option>
+<option>Silver</option>
+<option>Bronze</option>
+<option>Honourable Mention</option>
+</select>
+
+<table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>Name</th>
+<th>Country</th>
+<th>Medal</th>
+</tr>
+</thead>
+<tbody id="table"></tbody>
+</table>
+
+</div>
+
+<!-- STUDENTS -->
+<div id="students" class="section">
+<h2>Students</h2>
+<div class="grid">
+<div class="card">Top performers from 50+ countries</div>
+<div class="card">Rigorous theoretical + experimental exams</div>
+<div class="card">Global physics talent showcase</div>
+</div>
+</div>
+
+<!-- FACULTY -->
+<div id="faculty" class="section">
+<h2>Faculty</h2>
+<div class="grid">
+<div class="card">Problem setters from international universities</div>
+<div class="card">Experimental design teams</div>
+<div class="card">Evaluation committees</div>
+</div>
+</div>
+
+<!-- COUNTRIES -->
+<div id="countries" class="section">
+<h2>Participating Countries</h2>
+<div class="grid">
+<div class="card">India</div>
+<div class="card">China</div>
+<div class="card">Russia</div>
+<div class="card">USA</div>
+<div class="card">Iran</div>
+<div class="card">Romania</div>
+<div class="card">Kazakhstan</div>
+<div class="card">Vietnam</div>
+<div class="card">Turkey</div>
+<div class="card">Serbia</div>
+</div>
+</div>
+
+<!-- YEARS -->
+<div id="years" class="section">
+<h2>Other Years</h2>
+<div class="card">2025 – Thailand (Offline)</div>
+<div class="card">2024 – Thailand (November)</div>
+<div class="card">2023 – Japan</div>
+<div class="card">2022 – Switzerland</div>
+<div class="card">2021 – Online (COVID)</div>
+</div>
+
+<script>
+
+/* 🔥 CORE DATASET */
+const data = [
+
+/* GOLD */
+{rank:1,name:"Zhang Xinrui",country:"China",medal:"Gold"},
+{rank:2,name:"Jin Shuyu",country:"China",medal:"Gold"},
+{rank:3,name:"Potapov Egor",country:"Russia",medal:"Gold"},
+{rank:4,name:"Wang Zehua",country:"China",medal:"Gold"},
+{rank:5,name:"Pan Siyan",country:"China",medal:"Gold"},
+{rank:6,name:"Sun Rongxi",country:"China",medal:"Gold"},
+{rank:7,name:"Gavrilov Daniil",country:"Russia",medal:"Gold"},
+{rank:8,name:"Dragomir Andrei",country:"Romania",medal:"Gold"},
+{rank:9,name:"Than The Cong",country:"Vietnam",medal:"Gold"},
+{rank:10,name:"Gashpar Aleksei",country:"Russia",medal:"Gold"},
+{rank:11,name:"Likhokon Ivan",country:"Russia",medal:"Gold"},
+{rank:12,name:"Mohammad Amin Haghjoo",country:"Iran",medal:"Gold"},
+{rank:13,name:"Truong Phi Hung",country:"Vietnam",medal:"Gold"},
+{rank:14,name:"Momoiu Alexandru",country:"Romania",medal:"Gold"},
+{rank:15,name:"Rhythm Kedia",country:"India",medal:"Gold"},
+{rank:16,name:"Stan Ionut Gabriel",country:"Romania",medal:"Gold"},
+{rank:17,name:"Ved Lahoti",country:"India",medal:"Gold"},
+
+/* SILVER */
+{rank:18,name:"Alina Polanskaya",country:"Belarus",medal:"Silver"},
+{rank:19,name:"Behrad Mohammadian",country:"Iran",medal:"Silver"},
+{rank:20,name:"Anisimov Aleksandr",country:"Russia",medal:"Silver"},
+{rank:21,name:"Bhavya Tiwari",country:"India",medal:"Silver"},
+{rank:22,name:"Minjae Kim",country:"Korea",medal:"Silver"},
+{rank:23,name:"Akarsh Raj Sahay",country:"India",medal:"Silver"},
+{rank:24,name:"Mendelssohn Emanuel",country:"Romania",medal:"Silver"},
+{rank:25,name:"Seyyedmohammad Hosseini",country:"Iran",medal:"Silver"},
+
+/* YOUR ENTRY CORRECT */
+{rank:26,name:"Eshal Qaiser Bukhari",country:"India",medal:"Silver"},
+
+{rank:27,name:"Abolfazl Shiri",country:"Iran",medal:"Silver"},
+{rank:28,name:"Tudose Rares Felix",country:"Romania",medal:"Silver"},
+{rank:29,name:"Kim Artur",country:"Kazakhstan",medal:"Silver"},
+{rank:30,name:"Val Karan",country:"Croatia",medal:"Silver"},
+{rank:31,name:"Nguyen Nhat Minh",country:"Vietnam",medal:"Silver"},
+{rank:32,name:"Bissimbi Doszhan",country:"Kazakhstan",medal:"Silver"},
+{rank:33,name:"Arda Unver",country:"Turkey",medal:"Silver"},
+{rank:34,name:"Luka Tvalavadze",country:"Georgia",medal:"Silver"},
+{rank:35,name:"Sarah Musaei",country:"Iran",medal:"Silver"},
+{rank:36,name:"Nursagata Margulan",country:"Kazakhstan",medal:"Silver"},
+{rank:37,name:"Peshnavey Amir",country:"Kazakhstan",medal:"Silver"},
+{rank:38,name:"Azjargal Ganbold",country:"Mongolia",medal:"Silver"},
+{rank:39,name:"Mohamed Eid Al Aktaa",country:"Syria",medal:"Silver"},
+{rank:40,name:"Kutay Kulbak",country:"Turkey",medal:"Silver"},
+{rank:41,name:"Mihail Khyrsin",country:"Belarus",medal:"Silver"},
+{rank:42,name:"Bahaa Aldeen Melhem",country:"Syria",medal:"Silver"},
+{rank:43,name:"Drobnjakovic Andrej",country:"Serbia",medal:"Silver"},
+{rank:44,name:"Ara Mahdessian",country:"Cyprus",medal:"Silver"},
+{rank:45,name:"Bayan Momchilov Gechev",country:"Bulgaria",medal:"Silver"},
+{rank:46,name:"Jaiveer Singh",country:"India",medal:"Silver"},
+
+/* BRONZE + HM (PARTIAL) */
+{rank:54,name:"Abdul Hadi Chmachan",country:"Syria",medal:"Bronze"},
+{rank:60,name:"Alp Terliksiz",country:"Turkey",medal:"Bronze"},
+{rank:70,name:"Example Removed",country:"-",medal:"Bronze"},
+{rank:107,name:"Gazaryan Armen",country:"Armenia",medal:"Honourable Mention"},
+{rank:120,name:"Haidari Mohammadrobe",country:"Tajikistan",medal:"Honourable Mention"}
+
+];
+
+/* NAVIGATION */
+function show(id){
+document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+
+/* RENDER */
+function render(){
+const s=document.getElementById("search").value.toLowerCase();
+const m=document.getElementById("medal").value;
+const t=document.getElementById("table");
+t.innerHTML="";
+
+data.filter(d=>
+d.name.toLowerCase().includes(s) &&
+(m===""||d.medal===m)
+).forEach(d=>{
+t.innerHTML+=`
+<tr>
+<td>${d.rank}</td>
+<td>${d.name}</td>
+<td>${d.country}</td>
+<td>${d.medal}</td>
+</tr>`;
+});
+}
+
+render();
+
+</script>
+
+</body>
+</html>{rank:18,name:"Eshal Qaiser Bukhari",country:"India",medal:"Silver"},
+
+{rank:26,name:"Alina Polanskaya",country:"Belarus",medal:"Silver"},
